@@ -1854,6 +1854,12 @@ pax_attribute(struct archive_read *a, struct tar *tar,
 	if (value == NULL)
 		value = "";	/* Disable compiler warning; do not pass
 				 * NULL pointer to strlen().  */
+
+	/* Add all PAX headers to the entry, upper lays may want an independent look into them for
+	 * separate handling */
+
+	archive_entry_pax_kw_add_entry(entry, key, value, value_length);
+
 	switch (key[0]) {
 	case 'G':
 		/* Reject GNU.sparse.* headers on non-regular files. */

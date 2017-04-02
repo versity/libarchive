@@ -34,6 +34,7 @@ SET(libarchive_SOURCES
   archive_entry_stat.c
   archive_entry_strmode.c
   archive_entry_xattr.c
+  archive_entry_pax_kw.c
   archive_getdate.c
   archive_getdate.h
   archive_hmac.c
