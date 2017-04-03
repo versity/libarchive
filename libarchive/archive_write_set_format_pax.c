@@ -66,6 +66,7 @@ struct pax {
 	unsigned flags;
 #define WRITE_SCHILY_XATTR       (1 << 0)
 #define WRITE_LIBARCHIVE_XATTR   (1 << 1)
+#define WRITE_GENERIC_KW	 (1 << 2)
 };
 
 static void		 add_pax_attr(struct archive_string *, const char *key,
@@ -199,6 +200,9 @@ archive_write_pax_options(struct archive_write *a, const char *key,
 			archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
 			    "pax: invalid charset name");
 		return (ret);
+	} else if (strcmp(key, "generic_kw") == 0) {
+		pax->flags |= WRITE_GENERIC_KW;
+		return (ARCHIVE_OK);
 	}
 
 	/* Note: The "warn" return is just to inform the options
@@ -400,6 +404,53 @@ archive_write_pax_header_xattrs(struct archive_write *a,
 	}
 	return (ARCHIVE_OK);
 }
+
+static void
+archive_write_pax_header_kw(struct pax *pax, const char *encoded_name,
+    const void *value, size_t value_len)
+{
+	if (pax->flags & WRITE_GENERIC_KW) {
+		/* only supporting string values, that is what the generic standard allows */
+		add_pax_attr_binary(&(pax->pax_header), encoded_name, value, value_len);
+	}
+}
+
+static int
+archive_write_pax_header_kws(struct archive_write *a,
+    struct pax *pax, struct archive_entry *entry)
+{
+	int i = archive_entry_pax_kw_reset(entry);
+
+	while (i--) {
+		const char *name;
+		const void *value;
+		char *url_encoded_name = NULL, *encoded_name = NULL;
+		size_t value_len;
+		int r;
+
+		archive_entry_pax_kw_next(entry, &name, &value, &value_len);
+		url_encoded_name = url_encode(name);
+		if (url_encoded_name != NULL) {
+			/* Convert narrow-character to UTF-8. */
+			r = archive_strcpy_l(&(pax->l_url_encoded_name),
+			    url_encoded_name, pax->sconv_utf8);
+			free(url_encoded_name); /* Done with this. */
+			if (r == 0)
+				encoded_name = pax->l_url_encoded_name.s;
+			else if (errno == ENOMEM) {
+				archive_set_error(&a->archive, ENOMEM,
+				    "Can't allocate memory for keyword attribute");
+				return (ARCHIVE_FATAL);
+			}
+		}
+
+		archive_write_pax_header_kw(pax, encoded_name, value, value_len);
+
+	}
+	return (ARCHIVE_OK);
+}
+
+
 
 static int
 get_entry_hardlink(struct archive_write *a, struct archive_entry *entry,
@@ -1241,6 +1292,16 @@ archive_write_pax_header(struct archive_write *a,
 		/* Store extended attributes */
 		if (archive_write_pax_header_xattrs(a, pax, entry_original)
 		    == ARCHIVE_FATAL) {
+			archive_entry_free(entry_main);
+			archive_string_free(&entry_name);
+			return (ARCHIVE_FATAL);
+		}
+
+		/* XXX: Not quite understanding restricted pax and if we should add the generic k=v
+		 * attributes to those. For now erroring on the side of caution and adding them
+		 * like xattrs.
+		*/
+		if (archive_write_pax_header_kws(a, pax, entry_original) == ARCHIVE_FATAL) {
 			archive_entry_free(entry_main);
 			archive_string_free(&entry_name);
 			return (ARCHIVE_FATAL);
