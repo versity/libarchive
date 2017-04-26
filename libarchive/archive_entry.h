@@ -596,6 +596,25 @@ __LA_DECL int	archive_entry_xattr_next(struct archive_entry *,
 	    const char ** /* name */, const void ** /* value */, size_t *);
 
 /*
+ * PAX arbitrary key=value attributes
+ */
+
+__LA_DECL void	 archive_entry_pax_kw_clear(struct archive_entry *);
+__LA_DECL void	 archive_entry_pax_kw_add_entry(struct archive_entry *,
+	    const char * /* name */, const void * /* value */,
+	    size_t /* value_len */);
+
+/*
+ * To retrieve the pax_kw list, first "reset", then repeatedly ask for the
+ * "next" entry.
+ */
+
+__LA_DECL int	archive_entry_pax_kw_count(struct archive_entry *);
+__LA_DECL int	archive_entry_pax_kw_reset(struct archive_entry *);
+__LA_DECL int	archive_entry_pax_kw_next(struct archive_entry *,
+	    const char ** /* name */, const void ** /* value */,
+        size_t * /* value_len */);
+/*
  * sparse
  */
 
@@ -604,7 +623,7 @@ __LA_DECL void	 archive_entry_sparse_add_entry(struct archive_entry *,
 	    la_int64_t /* offset */, la_int64_t /* length */);
 
 /*
- * To retrieve the xattr list, first "reset", then repeatedly ask for the
+ * To retrieve the sparse list, first "reset", then repeatedly ask for the
  * "next" entry.
  */
 
