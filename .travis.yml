@@ -1,6 +1,10 @@
 language: C
-sudo: false
+sudo: required
 dist: trusty
+
+services:
+  - docker
+
 addons:
   apt:
     packages:
@@ -37,4 +41,6 @@ jobs:
       os: linux
       compiler: gcc
       env: BUILD_SYSTEM=cmake
-      script: build/makerelease.sh
+      script:
+        - build/makerelease.sh
+        - (cd .versity; docker build -t versity/libarchive-build .)
