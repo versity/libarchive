@@ -9,6 +9,8 @@ addons:
       - liblzma-dev
       - libzip-dev
       - lzop
+      - ghostscript
+      - groff
 os:
   - linux
   - osx
@@ -28,3 +30,11 @@ install:
   - if [ `uname` = "Darwin" ]; then brew install xz lzop lz4 zstd; fi
 script:
   - build/ci_build.sh
+
+jobs:
+  include:
+    - stage: makerelease
+      os: linux
+      compiler: gcc
+      env: BUILD_SYSTEM=cmake
+      script: build/makerelease.sh
