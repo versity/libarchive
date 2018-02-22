@@ -103,3 +103,5 @@ test-suite.log
 
 .sw?
 .*.sw?
+
+.versity/rpms/
