@@ -89,11 +89,12 @@ standard output.
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
+
 make %{?_smp_mflags}
 
 
 %install
-install -m 0444 -o root %SOURCE1 -D %{_sysconfdir}/ld.so.conf.d/vsm2-libarchive.conf
+install -m 0444 -o root %SOURCE1 -D $RPM_BUILD_ROOT/%{_sysconfdir}/ld.so.conf.d/vsm2-libarchive.conf
 make install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 
