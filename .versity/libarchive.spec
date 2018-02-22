@@ -1,13 +1,16 @@
 %bcond_without check
+%define tarname libarchive
+%define _prefix /opt/vsm/libarchive
 
-Name:           libarchive
+Name:           vsm-libarchive
 Version:        3.3.1
 Release:        4%{?dist}
 Summary:        A library for handling streaming archive formats
 
 License:        BSD
 URL:            http://www.libarchive.org/
-Source0:        http://www.libarchive.org/downloads/%{name}-%{version}.tar.gz
+Source0:        http://www.libarchive.org/downloads/%{tarname}-%{version}.tar.gz
+Source1:        vsm2-libarchive.conf
 
 # Upstream commit 1bfa37818f5e6
 Patch:          libarchive-3.3.1-cpio-getid.patch
@@ -43,36 +46,36 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 
-%package -n bsdtar
+%package -n vsm-bsdtar
 Summary:        Manipulate tape archives
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description -n bsdtar
+%description -n vsm-bsdtar
 The bsdtar package contains standalone bsdtar utility split off regular
 libarchive packages.
 
 
-%package -n bsdcpio
+%package -n vsm-bsdcpio
 Summary:        Copy files to and from archives
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description -n bsdcpio
+%description -n vsm-bsdcpio
 The bsdcpio package contains standalone bsdcpio utility split off regular
 libarchive packages.
 
 
-%package -n bsdcat
+%package -n vsm-bsdcat
 Summary:        Expand files to standard output
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description -n bsdcat
+%description -n vsm-bsdcat
 The bsdcat program typically takes a filename as an argument or reads standard
 input when used in a pipe.  In both cases decompressed data it written to
 standard output.
 
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n %{tarname}-%{version}
 
 
 %build
@@ -85,6 +88,7 @@ make %{?_smp_mflags}
 
 
 %install
+install -m 0444 -o root %SOURCE1 -D %{_sysconfdir}/ld.so.conf.d/vsm2-libarchive.conf
 make install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 
@@ -177,6 +181,7 @@ run_testsuite
 
 
 %files
+%config %{_sysconfdir}/ld.so.conf.d/vsm2-libarchive.conf
 %{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc NEWS README.md
@@ -192,21 +197,21 @@ run_testsuite
 %{_libdir}/libarchive.so
 %{_libdir}/pkgconfig/libarchive.pc
 
-%files -n bsdtar
+%files -n vsm-bsdtar
 %{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc NEWS README.md
 %{_bindir}/bsdtar
 %{_mandir}/*/bsdtar*
 
-%files -n bsdcpio
+%files -n vsm-bsdcpio
 %{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc NEWS README.md
 %{_bindir}/bsdcpio
 %{_mandir}/*/bsdcpio*
 
-%files -n bsdcat
+%files -n vsm-bsdcat
 %{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc NEWS README.md
