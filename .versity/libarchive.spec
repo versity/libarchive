@@ -14,6 +14,8 @@ Source1:        vsm2-libarchive.conf
 
 # Upstream commit 1bfa37818f5e6
 Patch:          libarchive-3.3.1-cpio-getid.patch
+# Sparse files do not get created correctly in docker, avoid since we test in travis
+Patch1:         disable-sparse-basic-test-for-docker.diff
 
 BuildRequires:  bison
 BuildRequires:  sharutils
@@ -79,6 +81,9 @@ standard output.
 
 
 %build
+# Only needed since we patched Makefile.am
+./build/autogen.sh
+
 %configure --disable-static --disable-rpath
 # remove rpaths
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -177,7 +182,10 @@ run_testsuite
 %endif
 
 
-%ldconfig_scriptlets
+%post -p /sbin/ldconfig
+
+
+%postun -p /sbin/ldconfig
 
 
 %files
