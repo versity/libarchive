@@ -2089,7 +2089,13 @@ static void assert_version_id(char **qq, size_t *ss)
 		q += 3;
 		s -= 3;
 	}
-	
+
+	/* allow vsm or vs1, etc -- Versity VSM versioning */
+	if (q[0] == 'v' && q[1] == 's' && q[2]) {
+		q += 3;
+		s -= 3;
+	}
+
 	/* Skip a single trailing a,b,c, or d. */
 	if (*q == 'a' || *q == 'b' || *q == 'c' || *q == 'd')
 		++q;

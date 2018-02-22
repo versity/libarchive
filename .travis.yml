@@ -43,5 +43,7 @@ jobs:
       env: BUILD_SYSTEM=cmake
       script:
         - build/makerelease.sh
+        # wildcard copy to allow us to move versioning forward without updating travis
+        - cp -v libarchive-*.tar.gz .versity/SOURCES/
         - (cd .versity; docker build -t versity/libarchive-build .)
         - (cd .versity; bash ./build_rpm_in_docker.sh)

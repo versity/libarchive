@@ -3,7 +3,7 @@
 %define _prefix /opt/vsm/libarchive
 
 Name:           vsm-libarchive
-Version:        3.3.2
+Version:        3.3.2vsm
 Release:        1%{?dist}
 Summary:        A library for handling streaming archive formats
 

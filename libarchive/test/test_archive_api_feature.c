@@ -44,6 +44,8 @@ DEFINE_TEST(test_archive_api_feature)
 		failure("Version string is: %s", archive_version_string());
 		if (p[0] == 'd'&& p[1] == 'e' && p[2] == 'v')
 			p += 3;
+		else if (p[0] == 'v'&& p[1] == 's' && p[2])
+			p += 3;
 		else {
 			assert(*p == 'a' || *p == 'b' || *p == 'c' || *p == 'd');
 			++p;
