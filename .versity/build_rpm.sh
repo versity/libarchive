@@ -18,3 +18,7 @@ SRPM=$(rpmbuild -bs ~/rpmbuild/SPECS/libarchive.spec | awk -F': ' '{print $2}') 
 test -f "$SRPM"
 
 rpmbuild --rebuild "$SRPM"
+
+rm -frv rpms
+mkdir -p rpms
+cp -v ~/rpmbuild/RPMS/*/* rpms/
