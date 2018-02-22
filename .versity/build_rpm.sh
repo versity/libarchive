@@ -4,9 +4,9 @@ set -x
 set -e -o pipefail
 
 # Temp, until we migrate to our generated .tar.gz here
-if ! test -f SOURCES/libarchive-3.3.1.tar.gz; then
+if ! test -f SOURCES/libarchive-3.3.2.tar.gz; then
     yum install -y wget
-    (cd SOURCES; wget http://www.libarchive.org/downloads/libarchive-3.3.1.tar.gz)
+    (cd SOURCES; wget http://www.libarchive.org/downloads/libarchive-3.3.2.tar.gz)
 fi
 
 mkdir -p ~/rpmbuild/{SOURCES,SPECS}
