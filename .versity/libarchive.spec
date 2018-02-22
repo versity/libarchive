@@ -57,15 +57,6 @@ The bsdtar package contains standalone bsdtar utility split off regular
 libarchive packages.
 
 
-%package -n vsm-bsdcpio
-Summary:        Copy files to and from archives
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-
-%description -n vsm-bsdcpio
-The bsdcpio package contains standalone bsdcpio utility split off regular
-libarchive packages.
-
-
 %package -n vsm-bsdcat
 Summary:        Expand files to standard output
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -84,7 +75,7 @@ standard output.
 # Only needed since we patched Makefile.am
 ./build/autogen.sh
 
-%configure --disable-static --disable-rpath
+%configure --disable-static --disable-rpath --disable-bsdcpio
 # remove rpaths
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -124,7 +115,7 @@ replace ()
     mv "$filename".new "$filename"
 }
 
-for manpage in bsdtar.1 bsdcpio.1
+for manpage in bsdtar.1
 do
     installed_manpage=`find "$RPM_BUILD_ROOT" -name "$manpage"`
     replace "$installed_manpage"
@@ -212,13 +203,6 @@ run_testsuite
 %doc NEWS README.md
 %{_bindir}/bsdtar
 %{_mandir}/*/bsdtar*
-
-%files -n vsm-bsdcpio
-%{!?_licensedir:%global license %%doc}
-%license COPYING
-%doc NEWS README.md
-%{_bindir}/bsdcpio
-%{_mandir}/*/bsdcpio*
 
 %files -n vsm-bsdcat
 %{!?_licensedir:%global license %%doc}
