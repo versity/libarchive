@@ -143,7 +143,7 @@ archive_write_set_format_pax(struct archive *_a)
 		    "Can't allocate pax data");
 		return (ARCHIVE_FATAL);
 	}
-	pax->flags = WRITE_LIBARCHIVE_XATTR | WRITE_SCHILY_XATTR;
+	pax->flags = WRITE_SCHILY_XATTR;
 
 	a->format_data = pax;
 	a->format_name = "pax";

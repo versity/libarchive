@@ -3,8 +3,8 @@
 %define _prefix /opt/vsm/libarchive
 
 Name:           vsm-libarchive
-Version:        3.3.1
-Release:        4%{?dist}
+Version:        3.3.2vsm
+Release:        1%{?dist}
 Summary:        A library for handling streaming archive formats
 
 License:        BSD
@@ -12,8 +12,6 @@ URL:            http://www.libarchive.org/
 Source0:        http://www.libarchive.org/downloads/%{tarname}-%{version}.tar.gz
 Source1:        vsm2-libarchive.conf
 
-# Upstream commit 1bfa37818f5e6
-Patch:          libarchive-3.3.1-cpio-getid.patch
 # Sparse files do not get created correctly in docker, avoid since we test in travis
 Patch1:         disable-sparse-basic-test-for-docker.diff
 
