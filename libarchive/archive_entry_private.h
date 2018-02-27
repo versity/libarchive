@@ -43,6 +43,14 @@ struct ae_xattr {
 	size_t	size;
 };
 
+struct ae_pax_kw {
+	struct ae_pax_kw *next;
+
+	char	*name;
+	char	*value;
+	size_t	value_len;
+};
+
 struct ae_sparse {
 	struct ae_sparse *next;
 
@@ -168,6 +176,10 @@ struct archive_entry {
 	/* extattr support. */
 	struct ae_xattr *xattr_head;
 	struct ae_xattr *xattr_p;
+
+    /* PAX arbitrary key=val support */
+    struct ae_pax_kw *pax_kw_head;
+    struct ae_pax_kw *pax_kw_p;
 
 	/* sparse support. */
 	struct ae_sparse *sparse_head;

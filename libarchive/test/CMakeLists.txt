@@ -186,6 +186,7 @@ IF(ENABLE_TEST)
     test_read_large.c
     test_read_pax_schily_xattr.c
     test_read_pax_truncated.c
+    test_read_pax_header_kw.c
     test_read_position.c
     test_read_set_format.c
     test_read_too_many_filters.c
