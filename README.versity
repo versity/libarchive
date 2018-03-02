@@ -1,0 +1,37 @@
+# Travis CI
+ - https://travis-ci.org/versity/libarchive
+
+# Mac development environment
+This largely follow the .travis.yml and build/ci_build.sh. It is preferred to
+doing this on Mac natively vs docker and Linux, as docker doesn't allow the
+sparse tests to create files like it expects. We disable cpio for known failures, and we don't really care if it works :D
+
+Full test output in `Testing/Temporary/LastTest.log`
+
+    $ brew install xz lzop lz4 cmake
+    $ mkdir _mac_test
+    $ cd _mac_test
+    $ cmake -DENABLE_CPIO=OFF ..
+    $ make -j4
+    $ make test
+
+It isn't unusual for a few tests to fail. Pushing changes to Travis for testing will re-test those and if there are still failures, it is a problem.
+
+
+	The following tests FAILED:
+
+	346 - libarchive_test_read_format_zip_winzip_aes128 (Failed)
+	347 - libarchive_test_read_format_zip_winzip_aes256 (Failed)
+	349 - libarchive_test_read_format_zip_winzip_aes256_large (Failed)
+	476 - libarchive_test_write_format_zip_winzip_aes128_encryption (Failed)
+	477 - libarchive_test_write_format_zip_winzip_aes256_encryption (Failed)
+	
+## Building Developer artifacts
+This script wraps the sub items below, building a clean set of artifacts for the normal development process (dist tar.gz, RPMS, docker container).
+
+	$ cd .versity
+	$ bash developer_build.sh
+	
+
+# Links
+ * https://github.com/libarchive/libarchive/wiki/LibarchiveAddingTest
