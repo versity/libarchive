@@ -26,7 +26,6 @@ BuildRequires:  libacl-devel
 BuildRequires:  libattr-devel
 BuildRequires:  openssl-devel
 BuildRequires:  libxml2-devel
-BuildRequires:  lz4-devel
 BuildRequires:  automake
 
 
