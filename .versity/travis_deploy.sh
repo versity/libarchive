@@ -16,7 +16,9 @@ ls -la rpms/*.rpm
 # refactor the repo... provided we can comingle kmod RPMs.
 PATTERN="rpms/*.rpm"
 
+export PATH="$TRAVIS_BUILD_DIR:$PATH"
+
 for el_version in "7.4.1708" "7.3.1611"; do
     repo="public-rpms/${el_version}/"
-    "$TRAVIS_BUILD_DIR"/jfrog rt upload "${PATTERN}" "${repo}"
+    jfrog rt upload "${PATTERN}" "${repo}"
 done

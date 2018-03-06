@@ -19,16 +19,10 @@ It isn't unusual for a few tests to fail. Pushing changes to Travis for testing 
 
 
 	The following tests FAILED:
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> e26036d5... Allow reading of PAX KW items
 	346 - libarchive_test_read_format_zip_winzip_aes128 (Failed)
 	347 - libarchive_test_read_format_zip_winzip_aes256 (Failed)
 	349 - libarchive_test_read_format_zip_winzip_aes256_large (Failed)
 	476 - libarchive_test_write_format_zip_winzip_aes128_encryption (Failed)
-<<<<<<< HEAD
 	477 - libarchive_test_write_format_zip_winzip_aes256_encryption (Failed)
 	
 ## Building Developer artifacts
@@ -38,12 +32,26 @@ This script wraps the sub items below, building a clean set of artifacts for the
 	$ bash developer_build.sh
 	
 
-=======
-	477 - libarchive_test_write_format_zip_winzip_aes256_encryption (Failed)	
-## Building RPMs
+# Release Process
+For a VSM only updated, we update the release in the RPM and tickle the git tags. A major/minor upstream release is TBD.
 
-	$  (cd .versity; bash ./build_rpm_in_docker.sh)
+	$ git tag -a v3.3.2vsm2
+	$ git diff .versity/libarchive.spec
 	
->>>>>>> e26036d5... Allow reading of PAX KW items
+	diff --git a/.versity/libarchive.spec b/.versity/libarchive.spec
+	 index 57cc65ad..500e4e77 100644
+	 --- a/.versity/libarchive.spec
+	 +++ b/.versity/libarchive.spec
+	 @@ -4,7 +4,7 @@
+	 
+	 Name:           vsm-libarchive
+	 Version:        3.3.2vsm
+	-Release:        1%{?dist}
+	+Release:        2%{?dist}
+	 Summary:        A library for handling streaming archive formats
+	
+	 License:        BSD
+
+	
 # Links
  * https://github.com/libarchive/libarchive/wiki/LibarchiveAddingTest
