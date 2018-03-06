@@ -113,6 +113,7 @@ libarchive_la_SOURCES= \
 	libarchive/archive_entry_stat.c \
 	libarchive/archive_entry_strmode.c \
 	libarchive/archive_entry_xattr.c \
+	libarchive/archive_entry_pax_kw.c \
 	libarchive/archive_getdate.c \
 	libarchive/archive_getdate.h \
 	libarchive/archive_hmac.c \
@@ -519,6 +520,7 @@ libarchive_test_SOURCES= \
 	libarchive/test/test_read_large.c \
 	libarchive/test/test_read_pax_schily_xattr.c \
 	libarchive/test/test_read_pax_truncated.c \
+	libarchive/test/test_read_pax_header_kw.c \
 	libarchive/test/test_read_position.c \
 	libarchive/test/test_read_set_format.c \
 	libarchive/test/test_read_too_many_filters.c \
