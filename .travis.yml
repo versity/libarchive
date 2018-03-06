@@ -45,5 +45,6 @@ jobs:
         - build/makerelease.sh
         # wildcard copy to allow us to move versioning forward without updating travis
         - cp -v libarchive-*.tar.gz .versity/SOURCES/
-        - (cd .versity; docker build -t versity/libarchive-build .)
+        - (cd .versity; docker build -f Dockerfile.build -t versity/libarchive-build .)
         - (cd .versity; bash ./build_rpm_in_docker.sh)
+        - (cd .versity; docker build -f Dockerfile -t versity/python:2.7-libarchive .)
