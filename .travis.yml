@@ -17,13 +17,13 @@ addons:
       - groff
 os:
   - linux
-  - osx
+    #- osx
 compiler:
   - gcc
-  - clang
+    #- clang
 env:
   - BUILD_SYSTEM=cmake
-  - BUILD_SYSTEM=autotools
+    #- BUILD_SYSTEM=autotools
 matrix:
   exclude:
     - os: osx
@@ -47,19 +47,6 @@ jobs:
     - stage: test
       script:
         - build/ci_build.sh
-    - stage: makerelease
-      os: linux
-      compiler: gcc
-      env: BUILD_SYSTEM=cmake
-      script:
-        - build/makerelease.sh
-        # wildcard copy to allow us to move versioning forward without updating travis
-        # NOTE: we run these here to verify a release is ready. the deploy step will run
-        # again, instead of us copying the artifacts around S3
-        - cp -v libarchive-*.tar.gz .versity/SOURCES/
-        - (cd .versity; docker build -f Dockerfile.build -t versity/libarchive-build .)
-        - (cd .versity; bash ./build_rpm_in_docker.sh)
-        - (cd .versity; docker build -f Dockerfile -t versity/python:2.7-libarchive .)
     - stage: deploy
       if: tag IS present and branch IS present
       os: linux
