@@ -28,10 +28,20 @@ matrix:
   exclude:
     - os: osx
       compiler: gcc
+
 before_install:
   - if [ `uname` = "Darwin" ]; then brew update; fi
+  - if [ `uname` = "Darwin" ]; then wget https://dl.bintray.com/jfrog/jfrog-cli-go/1.14.0/jfrog-cli-mac-386/jfrog; fi
+  - if [ `uname` = "Linux" ]; then wget https://dl.bintray.com/jfrog/jfrog-cli-go/1.14.0/jfrog-cli-linux-amd64/jfrog; fi
+
+  - env | sort
+
+  - chmod +x ./jfrog
+  - ./jfrog rt config versity --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USER" --password "$ARTIFACTORY_PASSWORD"
+
 install:
   - if [ `uname` = "Darwin" ]; then brew install xz lzop lz4; fi
+
 script:
   - build/ci_build.sh
 
@@ -44,7 +54,16 @@ jobs:
       script:
         - build/makerelease.sh
         # wildcard copy to allow us to move versioning forward without updating travis
+        # NOTE: we run these here to verify a release is ready. the deploy step will run
+        # again, instead of us copying the artifacts around S3
         - cp -v libarchive-*.tar.gz .versity/SOURCES/
         - (cd .versity; docker build -f Dockerfile.build -t versity/libarchive-build .)
         - (cd .versity; bash ./build_rpm_in_docker.sh)
         - (cd .versity; docker build -f Dockerfile -t versity/python:2.7-libarchive .)
+    - stage: deploy
+      if: tag IS present and branch IS present
+      os: linux
+      compiler: gcc
+      env: BUILD_SYSTEM=cmake
+      provider: script
+      script: /bin/bash -x $TRAVIS_BUILD_DIR/.versity/travis_deploy.sh
