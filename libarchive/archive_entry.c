@@ -167,6 +167,7 @@ archive_entry_clear(struct archive_entry *entry)
 	archive_acl_clear(&entry->acl);
 	archive_entry_xattr_clear(entry);
 	archive_entry_sparse_clear(entry);
+	archive_entry_pax_kw_clear(entry);
 	free(entry->stat);
 	memset(entry, 0, sizeof(*entry));
 	return entry;
