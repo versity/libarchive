@@ -4,7 +4,7 @@
 
 Name:           vsm-libarchive
 Version:        3.3.2vsm
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A library for handling streaming archive formats
 
 License:        BSD
